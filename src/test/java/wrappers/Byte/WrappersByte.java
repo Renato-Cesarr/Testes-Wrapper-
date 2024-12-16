@@ -1,4 +1,4 @@
-package wrappers;
+package wrappers.Byte;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -7,57 +7,51 @@ import org.junit.jupiter.api.Test;
 
 class WrappersByte {
 
-    Byte byteBase;
-    byte valorBase;
-    Byte byteMax;
-    Byte byteMin;
+    RecordByte valores;
 
     @BeforeEach
     void setup() {
-        byteBase = 10;
-        valorBase = 10;
-        byteMax = Byte.MAX_VALUE;
-        byteMin = Byte.MIN_VALUE;
+        valores = new RecordByte((byte) 10, (byte) 10, Byte.MAX_VALUE, Byte.MIN_VALUE);
     }
 
     @Test
     void TesteCompareTo() {
-        assertEquals(0, byteBase.compareTo((byte) 10));
-        assertTrue(byteBase.compareTo((byte) 5) > 0);
-        assertTrue(byteBase.compareTo((byte) 15) < 0);
+        assertEquals(0, valores.byteBase().compareTo((byte) 10));
+        assertTrue(valores.byteBase().compareTo((byte) 5) > 0);
+        assertTrue(valores.byteBase().compareTo((byte) 15) < 0);
     }
 
     @Test
     void TesteEquals() {
-        assertTrue(byteBase.equals((byte) 10));
-        assertFalse(byteBase.equals((byte) 15));
+        assertTrue(valores.byteBase().equals((byte) 10));
+        assertFalse(valores.byteBase().equals((byte) 15));
     }
 
     @Test
     void TesteMaxValue() {
-        assertEquals(Byte.MAX_VALUE, byteMax);
+        assertEquals(Byte.MAX_VALUE, valores.byteMax());
     }
 
     @Test
     void TesteMinValue() {
-        assertEquals(Byte.MIN_VALUE, byteMin);
+        assertEquals(Byte.MIN_VALUE, valores.byteMin());
     }
 
     @Test
     void TesteValueOf() {
-        assertEquals(byteBase, Byte.valueOf("10"));
-        assertThrows(NumberFormatException.class, () -> Byte.valueOf("invalid"));
+        assertEquals(valores.byteBase(), Byte.valueOf("10"));
+        assertThrows(NumberFormatException.class, () -> Byte.valueOf("invalido"));
     }
 
     @Test
     void TesteByteToString() {
-        assertEquals("10", byteBase.toString());
+        assertEquals("10", valores.byteBase().toString());
     }
 
     @Test
     void TesteParseByte() {
         assertEquals(10, Byte.parseByte("10"));
-        assertThrows(NumberFormatException.class, () -> Byte.parseByte("invalid"));
+        assertThrows(NumberFormatException.class, () -> Byte.parseByte("invalido"));
     }
 
     @Test
@@ -69,12 +63,12 @@ class WrappersByte {
 
     @Test
     void TesteToString() {
-        assertEquals("10", byteBase.toString());
+        assertEquals("10", valores.byteBase().toString());
     }
 
     @Test
     void TesteValueOfPrimitive() {
-        assertEquals(byteBase, Byte.valueOf(valorBase));
+        assertEquals(valores.byteBase(), Byte.valueOf(valores.valorBase()));
     }
 
     @Test
@@ -85,27 +79,27 @@ class WrappersByte {
 
     @Test
     void TesteShortValue() {
-        assertEquals(10, byteBase.shortValue());
+        assertEquals(10, valores.byteBase().shortValue());
     }
 
     @Test
     void TesteIntValue() {
-        assertEquals(10, byteBase.intValue());
+        assertEquals(10, valores.byteBase().intValue());
     }
 
     @Test
     void TesteLongValue() {
-        assertEquals(10L, byteBase.longValue());
+        assertEquals(10L, valores.byteBase().longValue());
     }
 
     @Test
     void TesteDoubleValue() {
-        assertEquals(10.0, byteBase.doubleValue());
+        assertEquals(10.0, valores.byteBase().doubleValue());
     }
 
     @Test
     void TesteFloatValue() {
-        assertEquals(10.0f, byteBase.floatValue());
+        assertEquals(10.0f, valores.byteBase().floatValue());
     }
 
     @Test

@@ -1,38 +1,48 @@
-package wrappers;
+package wrappers.Integer;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class WrappersInteger {
-	
+
+    public RecordInteger records;
+
+    @BeforeEach
+    void setup() {
+        records = new RecordInteger(
+            Integer.valueOf(5),
+            Integer.valueOf(10),
+            Integer.valueOf(20),
+            Integer.valueOf(10),
+            "10",
+            "24112003"
+        );
+    }
+
     @Test
     void TesteBitCount() {
-        Integer numeroSerContado = 5;
-        assertEquals(2, Integer.bitCount(numeroSerContado));
+        assertEquals(2, Integer.bitCount(records.valor5()));
     }
 
     @Test
     void TesteByteValue() {
-        Integer valorByte = 5;
-        assertEquals(5, valorByte.byteValue());
+        assertEquals(5, records.valor5().byteValue());
     }
 
     @Test
     void TesteCompare() {
-        assertEquals(0, Integer.compare(5, 5));
-        assertEquals(-1, Integer.compare(5, 10));
-        assertEquals(1, Integer.compare(10, 5));
+        assertEquals(0, Integer.compare(records.valor5(), records.valor5()));
+        assertEquals(-1, Integer.compare(records.valor5(), records.valor10()));
+        assertEquals(1, Integer.compare(records.valor10(), records.valor5()));
     }
 
     @Test
     void TesteCompareTo() {
-        Integer valorUm = 5;
-        Integer valorDois = 10;
-        assertEquals(0, valorUm.compareTo(5));
-        assertEquals(-1, valorUm.compareTo(valorDois));
-        assertEquals(1, valorDois.compareTo(valorUm));
+        assertEquals(0, records.valor5().compareTo(records.valor5()));
+        assertEquals(-1, records.valor5().compareTo(records.valor10()));
+        assertEquals(1, records.valor10().compareTo(records.valor5()));
     }
 
     @Test
@@ -50,21 +60,17 @@ class WrappersInteger {
 
     @Test
     void TesteDoubleValue() {
-        Integer numeroAntesDaConversao = 10;
-        assertEquals(10.0, numeroAntesDaConversao.doubleValue(), 0.1);
+        assertEquals(10.0, records.valor10().doubleValue(), 0.1);
     }
 
     @Test
     void TesteEquals() {
-        Integer primeiroValor = 10;
-        Integer segundoValor = 10;
-        assertTrue(primeiroValor.equals(segundoValor));
+        assertTrue(records.valor10().equals(records.valor10()));
     }
 
     @Test
     void TesteFloatValue() {
-        Integer numeroAntesDaConversao = 10;
-        assertEquals(10.0f, numeroAntesDaConversao.floatValue(), 0.1);
+        assertEquals(10.0f, records.valor10().floatValue(), 0.1);
     }
 
     @Test
@@ -85,65 +91,65 @@ class WrappersInteger {
 
     @Test
     void TesteHashCode() {
-        Integer valor = 10;
-        assertEquals(valor.hashCode(), Integer.hashCode(10));
+        Integer valor = records.valor10();
+        assertEquals(valor.hashCode(), Integer.hashCode(records.valor10()));
     }
 
     @Test
     void TesteHighestOneBit() {
-        assertEquals(8, Integer.highestOneBit(10));
+        assertEquals(8, Integer.highestOneBit(records.valor10()));
     }
 
     @Test
     void TesteIntValue() {
-        Integer valor = 10;
+        Integer valor = records.valor10();
         assertEquals(10, valor.intValue());
     }
 
     @Test
     void TesteLongValue() {
-        Integer valor = 10;
+        Integer valor = records.valor10();
         assertEquals(10L, valor.longValue());
     }
 
     @Test
     void TesteLowestOneBit() {
-        assertEquals(2, Integer.lowestOneBit(10));
+        assertEquals(2, Integer.lowestOneBit(records.valor10()));
     }
 
     @Test
     void TesteMax() {
-        assertEquals(20, Integer.max(10, 20));
+        assertEquals(records.valor20(), Integer.max(records.valor10(), records.valor20()));
     }
 
     @Test
     void TesteMin() {
-        assertEquals(10, Integer.min(10, 20));
+        assertEquals(records.valor10(), Integer.min(records.valor10(), records.valor20()));
     }
 
     @Test
     void TesteNumberOfLeadingZero() {
-        assertEquals(28, Integer.numberOfLeadingZeros(10));
+        assertEquals(28, Integer.numberOfLeadingZeros(records.valor10()));
     }
 
     @Test
     void TesteNumberOfTrailingZero() {
-        assertEquals(1, Integer.numberOfTrailingZeros(10));
+        assertEquals(1, Integer.numberOfTrailingZeros(records.valor10()));
     }
 
     @Test
     void TesteParseInt() {
-        assertEquals(24112003, Integer.parseInt("24112003"));
+        assertEquals(24112003, Integer.parseInt(records.valorString24112003()));
     }
 
     @Test
     void TesteParseIntComParametros() {
-        assertEquals(24112003, Integer.parseInt("24112003", 10));
+        assertEquals(24112003, Integer.parseInt(records.valorString24112003(), 10));
     }
 
     @Test
     void TesteParseUnsignedInt() {
-        assertEquals(10, Integer.parseUnsignedInt("10"));
+        assertEquals(10, Integer.parseUnsignedInt(records.valorString10()));
     }
 
     @Test
@@ -158,22 +164,22 @@ class WrappersInteger {
 
     @Test
     void TesteReverse() {
-        assertEquals(-536870912, Integer.reverse(10));
+        assertEquals(1342177280, Integer.reverse(records.valor10()));
     }
 
     @Test
     void TesteReverseBytes() {
-        assertEquals(167772160, Integer.reverseBytes(10));
+        assertEquals(167772160, Integer.reverseBytes(records.valor10()));
     }
 
     @Test
     void TesteRotateLeft() {
-        assertEquals(40, Integer.rotateLeft(10, 2));
+        assertEquals(40, Integer.rotateLeft(records.valor10(), 2));
     }
 
     @Test
     void TesteRotateRight() {
-        assertEquals(-2147483646, Integer.rotateRight(10, 2));
+        assertEquals(-2147483646, Integer.rotateRight(records.valor10(), 2));
     }
 
     @Test
@@ -194,17 +200,17 @@ class WrappersInteger {
 
     @Test
     void TesteToBinaryString() {
-        assertEquals("1010", Integer.toBinaryString(10));
+        assertEquals("1010", Integer.toBinaryString(records.valor10()));
     }
 
     @Test
     void TesteToHexString() {
-        assertEquals("a", Integer.toHexString(10));
+        assertEquals("a", Integer.toHexString(records.valor10()));
     }
 
     @Test
     void TesteToOctalString() {
-        assertEquals("12", Integer.toOctalString(10));
+        assertEquals("12", Integer.toOctalString(records.valor10()));
     }
 
     @Test
@@ -215,23 +221,23 @@ class WrappersInteger {
 
     @Test
     void TesteToStringComParametros() {
-        assertEquals("200", Integer.toString(200));
-        assertEquals("314", Integer.toString(200, 8));
+        assertEquals("200", Integer.toString(200));          
+        assertEquals("310", Integer.toString(200, 8));
     }
 
     @Test
     void TesteToUnsignedLong() {
-        assertEquals(10L, Integer.toUnsignedLong(10));
+        assertEquals(10L, Integer.toUnsignedLong(records.valor10()));
     }
 
     @Test
     void TesteToUnsignedString() {
-        assertEquals("10", Integer.toUnsignedString(10));
+        assertEquals("10", Integer.toUnsignedString(records.valor10()));
     }
 
     @Test
     void TesteToUnsignedStringComParametro() {
-        assertEquals("10", Integer.toUnsignedString(10, 10));
+        assertEquals("10", Integer.toUnsignedString(records.valor10(), 10));
     }
 
     @Test

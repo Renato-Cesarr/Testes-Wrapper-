@@ -1,4 +1,4 @@
-package wrappers;
+package wrappers.Boolean;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -7,51 +7,43 @@ import org.junit.jupiter.api.Test;
 
 class WrapperBoolean {
 
-    Boolean booleanTrue;
-    Boolean booleanFalse;
-    Boolean booleanNull;
-    Boolean primTrue;
-    Boolean primFalse;
+    RecordBoolean recordBoolean;
 
     @BeforeEach
     void setup() {
-        booleanTrue = true;
-        booleanFalse = false;
-        booleanNull = null;
-        primTrue = true;
-        primFalse = false;
+        recordBoolean = new RecordBoolean(true, false, null, true, false);
     }
 
     @Test
     void TesteCompareTo() {
-        assertEquals(0, booleanTrue.compareTo(true));
-        assertTrue(booleanTrue.compareTo(false) > 0);
-        assertTrue(booleanFalse.compareTo(true) < 0);
+        assertEquals(0, recordBoolean.booleanTrue().compareTo(true));
+        assertTrue(recordBoolean.booleanTrue().compareTo(false) > 0);
+        assertTrue(recordBoolean.booleanFalse().compareTo(true) < 0);
     }
 
     @Test
     void TesteEquals() {
-        assertTrue(booleanTrue.equals(true));
-        assertFalse(booleanTrue.equals(false));
+        assertTrue(recordBoolean.booleanTrue().equals(true));
+        assertFalse(recordBoolean.booleanTrue().equals(false));
     }
 
     @Test
     void TesteBooleanValue() {
-        assertTrue(booleanTrue.booleanValue());
-        assertFalse(booleanFalse.booleanValue());
+        assertTrue(recordBoolean.booleanTrue());
+        assertFalse(recordBoolean.booleanFalse());
     }
 
     @Test
     void TesteToString() {
-        assertEquals("true", booleanTrue.toString());
-        assertEquals("false", booleanFalse.toString());
+        assertEquals("true", recordBoolean.booleanTrue().toString());
+        assertEquals("false", recordBoolean.booleanFalse().toString());
     }
 
     @Test
     void TesteParseBoolean() {
         assertTrue(Boolean.parseBoolean("true"));
         assertFalse(Boolean.parseBoolean("false"));
-        assertFalse(Boolean.parseBoolean("any other string")); // Qualquer string diferente de "true" retorna false
+        assertFalse(Boolean.parseBoolean("qualquer outro"));
     }
 
     @Test
@@ -90,23 +82,23 @@ class WrapperBoolean {
 
     @Test
     void TesteNullBoolean() {
-        assertNull(booleanNull);
+        assertNull(recordBoolean.booleanNull());
     }
 
     @Test
     void TestePrimitiveBoolean() {
-        assertTrue(primTrue);
-        assertFalse(primFalse);
+        assertTrue(recordBoolean.primTrue());
+        assertFalse(recordBoolean.primFalse());
     }
 
     @Test
     void TesteToStringWithPrimitiveTrue() {
-        assertEquals("true", Boolean.toString(primTrue));
+        assertEquals("true", Boolean.toString(recordBoolean.primTrue()));
     }
 
     @Test
     void TesteToStringWithPrimitiveFalse() {
-        assertEquals("false", Boolean.toString(primFalse));
+        assertEquals("false", Boolean.toString(recordBoolean.primFalse()));
     }
 
     @Test
