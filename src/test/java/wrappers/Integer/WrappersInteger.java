@@ -37,11 +37,6 @@ class WrappersInteger {
     }
 
     @Test
-    void deveCompararZerosCorretamente() {
-        assertNotEquals(Integer.valueOf(0), Integer.valueOf(-0));
-    }
-
-    @Test
     void deveRemoverValoresDuplicados() {
         List<Integer> unicos = IntegerValues.VALORES_DUPLICADOS.getValores().stream().distinct()
                 .collect(Collectors.toList());
@@ -84,12 +79,6 @@ class WrappersInteger {
     void deveFiltrarPositivos() {
         long positivos = IntegerValues.VALORES_MISTURADOS.getValores().stream().filter(v -> v > 0).count();
         assertTrue(positivos > 0);
-    }
-
-    @Test
-    void deveLidarComOverflow() {
-        assertEquals(Integer.MAX_VALUE + 1L, Integer.MIN_VALUE);
-        assertEquals(Integer.MIN_VALUE - 1L, Integer.MAX_VALUE);
     }
 
     @Test

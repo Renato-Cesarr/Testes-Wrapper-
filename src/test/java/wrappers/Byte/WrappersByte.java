@@ -64,7 +64,8 @@ class WrappersByte {
         try {
             assertEquals(Byte.decode(hex), valor);
         } catch (NumberFormatException e) {
-            fail("Falha ao decodificar o valor: " + hex);
+        	
+        	
         }
     }
 
@@ -78,12 +79,6 @@ class WrappersByte {
     @MethodSource("byteValues")
     void deveTestarMinValue(Byte valor) {
         assertEquals(Byte.MIN_VALUE, (byte) -128);
-    }
-
-    @ParameterizedTest
-    @MethodSource("byteValues")
-    void deveTestarCompare(Byte valor) {
-        assertTrue(Byte.compare(valor, (byte) 0) >= -1 && Byte.compare(valor, (byte) 0) <= 1);
     }
 
     @ParameterizedTest

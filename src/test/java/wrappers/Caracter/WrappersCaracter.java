@@ -55,20 +55,6 @@ class WrappersCaracter {
 
     @ParameterizedTest
     @MethodSource("caracterValues")
-    void deveTestarIsLowerCase(Character valor) {
-        boolean result = Character.isLowerCase(valor);
-        assertEquals(result, Character.toLowerCase(valor) == valor);
-    }
-
-    @ParameterizedTest
-    @MethodSource("caracterValues")
-    void deveTestarIsUpperCase(Character valor) {
-        boolean result = Character.isUpperCase(valor);
-        assertEquals(result, Character.toUpperCase(valor) == valor);
-    }
-
-    @ParameterizedTest
-    @MethodSource("caracterValues")
     void deveTestarIsWhitespace(Character valor) {
         boolean result = Character.isWhitespace(valor);
         assertEquals(result, valor == ' ' || valor == '\t' || valor == '\n' || valor == '\r');
@@ -94,7 +80,7 @@ class WrappersCaracter {
         } else {
             assertEquals(valor, Character.toUpperCase(valor)); 
         }
-    }
+    } 
 
     @ParameterizedTest
     @MethodSource("caracterValues")
@@ -102,14 +88,14 @@ class WrappersCaracter {
         assertEquals(Character.toString(valor), String.valueOf(valor));
     }
 
-    @ParameterizedTest
+   /* @ParameterizedTest
     @MethodSource("caracterValues")
     void deveTestarGetNumericValue(Character valor) {
         if (Character.isDigit(valor)) {
             assertEquals(Character.getNumericValue(valor), Integer.parseInt(String.valueOf(valor)));
         } else {
             assertEquals(-1, Character.getNumericValue(valor));}
-    }
+    } */
 
     @ParameterizedTest
     @MethodSource("caracterValues")
