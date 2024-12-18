@@ -1,10 +1,10 @@
-package wrappers;
+package wrappers.Byte;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-class Wrappers {
+class WrappersByte {
 
 	@Test
 	void test() {
