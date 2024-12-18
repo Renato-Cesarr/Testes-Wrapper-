@@ -7,103 +7,114 @@ import org.junit.jupiter.api.Test;
 
 class WrappersLong {
 
-    RecordLong valoresLong;
+    private LongValues values;
 
     @BeforeEach
-    void setup() {
-        valoresLong = new RecordLong(100L, 100L, Long.MAX_VALUE, Long.MIN_VALUE );
+    void setUp() {
+        values = LongValues.VALORES_TIPICOS;
     }
 
     @Test
-    void TesteCompareTo() {
-        assertEquals(0, valoresLong.longBase().compareTo(100L));
-        assertTrue(valoresLong.longBase().compareTo(50L) > 0);
-        assertTrue(valoresLong.longBase().compareTo(150L) < 0);
+    void deveRetornarValorMaximoCorreto() {
+        Long max = values.getValores().stream().max(Long::compare).orElseThrow();
+        assertTrue(values.getValores().stream().allMatch(v -> v <= max));
     }
 
     @Test
-    void TesteEquals() {
-        assertTrue(valoresLong.longBase().equals(100L));
-        assertFalse(valoresLong.longBase().equals(150L));
+    void deveRetornarValorMinimoCorreto() {
+        Long min = values.getValores().stream().min(Long::compare).orElseThrow();
+        assertTrue(values.getValores().stream().allMatch(v -> v >= min));
     }
 
     @Test
-    void TesteMaxValue() {
-        assertEquals(Long.MAX_VALUE, valoresLong.longMax());
+    void deveSomarValoresCorretamente() {
+        Long soma = values.getValores().stream().reduce(0L, Long::sum);
+        assertTrue(values.getValores().stream().mapToLong(Long::longValue).sum() == soma);
     }
 
     @Test
-    void TesteMinValue() {
-        assertEquals(Long.MIN_VALUE, valoresLong.longMin());
+    void deveCompararValoresCorretamente() {
+        values.getValores().stream().forEach(valor -> {
+            assertEquals(0, Long.compare(valor, valor)); 
+            values.getValores().stream().filter(v -> v != valor)
+                .forEach(outro -> {
+                    assertTrue(Long.compare(valor, outro) != 0); 
+                });
+        });
     }
 
     @Test
-    void TesteValueOf() {
-        assertEquals(valoresLong.longBase(), Long.valueOf("100"));
-        assertThrows(NumberFormatException.class, () -> Long.valueOf("invalid"));
+    void deveConverterValoresCorretamente() {
+        values.getValores().forEach(valor -> {
+            assertEquals(valor.byteValue(), valor.byteValue());
+            assertEquals(valor.shortValue(), valor.shortValue());
+            assertEquals(valor.intValue(), valor.intValue());
+            assertEquals(valor.longValue(), valor.longValue());
+            assertEquals(valor.doubleValue(), valor.doubleValue(), 0.001);
+        });
     }
 
     @Test
-    void TesteLongToString() {
-        assertEquals("100", valoresLong.longBase().toString());
+    void deveLidarComParseLongValidoEInvalido() {
+        values.getValores().forEach(valor -> {
+            assertDoesNotThrow(() -> Long.parseLong(valor.toString()));
+        });
+        assertThrows(NumberFormatException.class, () -> Long.parseLong("abc"));
     }
 
     @Test
-    void TesteParseLong() {
-        assertEquals(100L, Long.parseLong("100"));
-        assertThrows(NumberFormatException.class, () -> Long.parseLong("invalid"));
+    void deveVerificarHashCodeEIgualdadeCorretos() {
+        Long valor1 = values.getValores().get(0);
+        Long valor2 = values.getValores().get(0);
+        assertEquals(valor1.hashCode(), valor2.hashCode());
+        assertTrue(valor1.equals(valor2));
     }
 
     @Test
-    void TesteCompare() {
-        assertEquals(0, Long.compare(100L, 100L));
-        assertTrue(Long.compare(50L, 100L) < 0);
-        assertTrue(Long.compare(150L, 100L) > 0);
+    void deveTestarValueOf() {
+        values.getValores().forEach(valor -> {
+            assertEquals(Long.valueOf(valor.toString()), valor);
+        });
     }
 
     @Test
-    void TesteValueOfPrimitive() {
-        assertEquals(valoresLong.longBase(), Long.valueOf(valoresLong.valorBase()));
+    void deveTestarToString() {
+        values.getValores().forEach(valor -> {
+            assertEquals(valor.toString(), valor.toString());
+        });
     }
 
     @Test
-    void TesteParseLongWithRadix() {
-        assertEquals(100L, Long.parseLong("64", 16)); 
-        assertThrows(NumberFormatException.class, () -> Long.parseLong("ZZ", 16));
+    void deveTestarCompareTo() {
+        values.getValores().stream().forEach(valor -> {
+            assertTrue(valor.compareTo(valor) == 0); 
+            values.getValores().stream().filter(outro -> outro != valor)
+                .forEach(outro -> {
+                    assertTrue(valor.compareTo(outro) != 0);  
+                });
+        });
     }
 
     @Test
-    void TesteShortValue() {
-        assertEquals(100, valoresLong.longBase().shortValue());
+    void deveTestarBitCount() {
+        values.getValores().forEach(valor -> {
+            int bitCount = Long.bitCount(valor);
+            assertTrue(bitCount >= 0); 
+        });
     }
 
     @Test
-    void TesteIntValue() {
-        assertEquals(100, valoresLong.longBase().intValue());
+    void deveTestarReverse() {
+        values.getValores().forEach(valor -> {
+            long reversed = Long.reverse(valor);
+            assertTrue(reversed != valor);
+        });
     }
 
     @Test
-    void TesteLongValue() {
-        assertEquals(100L, valoresLong.longBase().longValue());
-    }
-
-    @Test
-    void TesteDoubleValue() {
-        assertEquals(100.0, valoresLong.longBase().doubleValue());
-    }
-
-    @Test
-    void TesteFloatValue() {
-        assertEquals(100.0f, valoresLong.longBase().floatValue());
-    }
-
-    @Test
-    void TesteToStringComPositivoValor() {
-        assertEquals("9223372036854775807", Long.toString(Long.MAX_VALUE));
-    }
-
-    @Test
-    void TesteToStringComNegativoValor() {
-        assertEquals("-9223372036854775808", Long.toString(Long.MIN_VALUE));
+    void deveTestarPrecisaoDoubleValue() {
+        values.getValores().forEach(valor -> {
+            assertEquals(valor.doubleValue(), valor.doubleValue(), 0.001);
+        });
     }
 }

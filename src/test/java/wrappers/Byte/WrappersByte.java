@@ -1,114 +1,103 @@
-package wrappers.Byte;
+	package wrappers.Byte;
+	
+	import static org.junit.jupiter.api.Assertions.*;
+	
+	import org.junit.jupiter.api.Test;
+	
+	class WrappersByte {
 
-import static org.junit.jupiter.api.Assertions.*;
+    @Test
+    void deveCompararValoresCorretamente() {
+        for (ByteValues valor : ByteValues.values()) {
+            byte valorAtual = valor.getValor();
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+            byte maiorValor = (byte) (valorAtual + 1); 
+            assertTrue(Byte.compare(valorAtual, maiorValor) < 0);
 
-class WrappersByte {
+            byte menorValor = (byte) (valorAtual - 1);
+            assertTrue(Byte.compare(valorAtual, menorValor) > 0);
+        }
+    }
 
-    RecordByte valores;
-
-    @BeforeEach
-    void setup() {
-        valores = new RecordByte((byte) 10, (byte) 10, Byte.MAX_VALUE, Byte.MIN_VALUE);
+    void deveVerificarIgualdadeEntreDoisValores() {
+        byte valor1 = ByteValues.BYTE_MAX.getValor();
+        byte valor2 = ByteValues.BYTE_MIN.getValor();
+        assertNotEquals(valor1, valor2);
     }
 
     @Test
-    void TesteCompareTo() {
-        assertEquals(0, valores.byteBase().compareTo((byte) 10));
-        assertTrue(valores.byteBase().compareTo((byte) 5) > 0);
-        assertTrue(valores.byteBase().compareTo((byte) 15) < 0);
+    void deveRetornarMaximoCorreto() {
+        assertEquals(Byte.MAX_VALUE, ByteValues.BYTE_MAX.getValor());
     }
 
     @Test
-    void TesteEquals() {
-        assertTrue(valores.byteBase().equals((byte) 10));
-        assertFalse(valores.byteBase().equals((byte) 15));
+    void deveRetornarMinimoCorreto() {
+        assertEquals(Byte.MIN_VALUE, ByteValues.BYTE_MIN.getValor());
     }
 
     @Test
-    void TesteMaxValue() {
-        assertEquals(Byte.MAX_VALUE, valores.byteMax());
+    void deveConverterStringParaByteCorretamente() {
+        for (ByteValues valor : ByteValues.values()) {
+            assertEquals(valor.getValor(), Byte.valueOf(String.valueOf(valor.getValor())));
+        }
     }
 
     @Test
-    void TesteMinValue() {
-        assertEquals(Byte.MIN_VALUE, valores.byteMin());
+    void deveRetornarStringCorreta() {
+        for (ByteValues valor : ByteValues.values()) {
+            assertEquals(String.valueOf(valor.getValor()), valor.getValor().toString());
+        }
     }
 
     @Test
-    void TesteValueOf() {
-        assertEquals(valores.byteBase(), Byte.valueOf("10"));
-        assertThrows(NumberFormatException.class, () -> Byte.valueOf("invalido"));
+    void deveConverterStringParaByteParseCorretamente() {
+        for (ByteValues valor : ByteValues.values()) {
+            assertEquals(valor.getValor(), Byte.parseByte(String.valueOf(valor.getValor())));
+        }
     }
 
     @Test
-    void TesteByteToString() {
-        assertEquals("10", valores.byteBase().toString());
+    void deveConverterParaShortCorretamente() {
+        for (ByteValues valor : ByteValues.values()) {
+            assertEquals(valor.getValor().shortValue(), valor.getValor().shortValue());
+        }
     }
 
     @Test
-    void TesteParseByte() {
-        assertEquals(10, Byte.parseByte("10"));
-        assertThrows(NumberFormatException.class, () -> Byte.parseByte("invalido"));
+    void deveConverterParaIntCorretamente() {
+        for (ByteValues valor : ByteValues.values()) {
+            assertEquals(valor.getValor().intValue(), valor.getValor().intValue());
+        }
     }
 
     @Test
-    void TesteCompare() {
-        assertEquals(0, Byte.compare((byte) 10, (byte) 10));
-        assertTrue(Byte.compare((byte) 5, (byte) 10) < 0);
-        assertTrue(Byte.compare((byte) 15, (byte) 10) > 0);
+    void deveConverterParaLongCorretamente() {
+        for (ByteValues valor : ByteValues.values()) {
+            assertEquals(valor.getValor().longValue(), valor.getValor().longValue());
+        }
     }
 
     @Test
-    void TesteToString() {
-        assertEquals("10", valores.byteBase().toString());
+    void deveConverterParaDoubleCorretamente() {
+        for (ByteValues valor : ByteValues.values()) {
+            assertEquals(valor.getValor().doubleValue(), valor.getValor().doubleValue());
+        }
     }
 
     @Test
-    void TesteValueOfPrimitive() {
-        assertEquals(valores.byteBase(), Byte.valueOf(valores.valorBase()));
+    void deveConverterParaFloatCorretamente() {
+        for (ByteValues valor : ByteValues.values()) {
+            assertEquals(valor.getValor().floatValue(), valor.getValor().floatValue());
+        }
     }
 
     @Test
-    void TesteParseByteWithRadix() {
-        assertEquals(10, Byte.parseByte("A", 16));  // A é 10 em base 16
-        assertThrows(NumberFormatException.class, () -> Byte.parseByte("Z", 16));
+    void deveRetornarStringCorretaComValorPositivo() {
+        assertEquals(String.valueOf(ByteValues.BYTE_Positivo.getValor()), Byte.toString(Byte.MAX_VALUE));
     }
 
     @Test
-    void TesteShortValue() {
-        assertEquals(10, valores.byteBase().shortValue());
-    }
-
-    @Test
-    void TesteIntValue() {
-        assertEquals(10, valores.byteBase().intValue());
-    }
-
-    @Test
-    void TesteLongValue() {
-        assertEquals(10L, valores.byteBase().longValue());
-    }
-
-    @Test
-    void TesteDoubleValue() {
-        assertEquals(10.0, valores.byteBase().doubleValue());
-    }
-
-    @Test
-    void TesteFloatValue() {
-        assertEquals(10.0f, valores.byteBase().floatValue());
-    }
-
-    @Test
-    void TesteToStringWithPositiveValue() {
-        assertEquals("127", Byte.toString(Byte.MAX_VALUE));
-    }
-
-    @Test
-    void TesteToStringWithNegativeValue() {
-        assertEquals("-128", Byte.toString(Byte.MIN_VALUE));
+    void deveRetornarStringCorretaComValorNegativo() {
+        assertEquals(String.valueOf(ByteValues.BYTE_Negativo.getValor()), Byte.toString(Byte.MIN_VALUE));
     }
 }

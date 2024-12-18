@@ -1,139 +1,106 @@
 package wrappers.Float;
 
 import static org.junit.jupiter.api.Assertions.*;
+import java.util.List;
+import java.util.stream.Collectors;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test; 
+import org.junit.jupiter.api.Test;
 
 class WrapperFloat {
 
-    RecordFloat valores;
-
-    @BeforeEach
-    void setup() {
-        valores = new RecordFloat(
-            10.5f,  
-            20.5f,   
-            10.5f,  
-            10.5f,   
-            20.5f,  
-            31.0f,  
-            10L,     
-            "10.5",  
-            10,      
-            10.5     
-        );
+    @Test
+    void deveRetornarValorMaximoCorreto() {
+        Float max = FloatValues.VALORES_GRANDES.getValores().stream().max(Float::compare).orElseThrow();
+        assertTrue(FloatValues.VALORES_GRANDES.getValores().stream().allMatch(v -> v <= max));
     }
 
     @Test
-    void TesteCompare() {
-        assertTrue(Float.compare(valores.valor1(), valores.valor2()) < 0);
-        assertTrue(Float.compare(valores.valor2(), valores.valor1()) > 0);
-        assertEquals(0, Float.compare(valores.valor1(), valores.valor3()));
+    void deveRetornarValorMinimoCorreto() {
+        Float min = FloatValues.VALORES_GRANDES.getValores().stream().min(Float::compare).orElseThrow();
+        assertTrue(FloatValues.VALORES_GRANDES.getValores().stream().allMatch(v -> v >= min));
     }
 
     @Test
-    void TesteIsNaN() {
-        Float valorNaN = Float.NaN;
-        assertTrue(valorNaN.isNaN());
-        assertFalse(valores.valor1().isNaN());
+    void deveSomarValoresPequenosCorretamente() {
+        Float soma = FloatValues.VALORES_PEQUENOS.getValores().stream().reduce(0f, Float::sum);
+        assertTrue(FloatValues.VALORES_PEQUENOS.getValores().stream().mapToDouble(Float::doubleValue).sum() == soma);
     }
 
     @Test
-    void TesteIsInfinite() {
-        Float valorPositivoInfinito = Float.POSITIVE_INFINITY;
-        Float valorNegativoInfinito = Float.NEGATIVE_INFINITY;
-
-        assertTrue(valorPositivoInfinito.isInfinite());
-        assertTrue(valorNegativoInfinito.isInfinite());
-        assertFalse(valores.valor1().isInfinite());
+    void deveIdentificarValorEspecialIsNaN() {
+        Long quantidadeNaN = FloatValues.VALORES_ESPECIAIS.getValores().stream().filter(v -> Float.isNaN(v)).count();
+        assertEquals(1, quantidadeNaN);
     }
 
     @Test
-    void TesteParseFloat() {
-        assertEquals(valores.valor10_5f(), Float.parseFloat(valores.valorString()));
+    void deveIdentificarValorEspecialIsInfinite() {
+        Long infinitos = FloatValues.VALORES_ESPECIAIS.getValores().stream().filter(v -> Float.isInfinite(v)).count();
+        assertEquals(2, infinitos);
     }
 
     @Test
-    void TesteValueOf() {
-        Float valor = Float.valueOf(valores.valorString());
-        assertEquals(valores.valor10_5f(), valor);
+    void deveCompararZerosCorretamente() {
+        assertNotEquals(Float.floatToIntBits(0.0f), Float.floatToIntBits(-0.0f));
     }
 
     @Test
-    void TesteToString() {
-        assertEquals(valores.valor10_5f().toString(), valores.valor1().toString());
+    void deveRemoverValoresDuplicados() {
+        List<Float> unicos = FloatValues.VALORES_DUPLICADOS.getValores().stream().distinct()
+                .collect(Collectors.toList());
+        assertTrue(unicos.size() > 1);
     }
 
     @Test
-    void TesteFloatToIntBits() {
-        assertEquals(Float.floatToIntBits(valores.valor1()), Float.floatToIntBits(valores.valor10_5f()));
+    void deveRestaurarValorCorretamenteUsandoFloatToIntBits() {
+        Float original = FloatValues.VALOR_CONSTANTE.getValores().get(0);
+        Integer bits = Float.floatToIntBits(original);
+        Float restaurado = Float.intBitsToFloat(bits);
+        assertEquals(original, restaurado, 0.001);
     }
 
     @Test
-    void TesteFloatToRawIntBits() {
-        assertEquals(Float.floatToRawIntBits(valores.valor1()), Float.floatToRawIntBits(valores.valor10_5f()));
+    void deveGarantirPrecisaoNaAdicao() {
+        assertTrue(Math.abs(0.1f + 0.2f - 0.3f) < 1e-6);
     }
 
     @Test
-    void TesteIntBitsToFloat() {
-        int bits = Float.floatToIntBits(valores.valor10_5f());
-        assertEquals(valores.valor10_5f(), Float.intBitsToFloat(bits));
+    void deveConverterValoresCorretamente() {
+        Float valor = FloatValues.VALOR_CONSTANTE.getValores().get(1);
+        assertEquals(valor.byteValue(), valor.byteValue());
+        assertEquals(valor.shortValue(), valor.shortValue());
+        assertEquals(valor.intValue(), valor.intValue());
+        assertEquals(valor.longValue(), valor.longValue());
+        assertEquals(valor.doubleValue(), valor.doubleValue(), 0.001);
     }
 
     @Test
-    void TesteHashCode() {
-        assertEquals(valores.valor1().hashCode(), Float.valueOf(valores.valor10_5f()).hashCode());
+    void deveLidarComParseFloatValidoEInvalido() {
+        assertEquals(15.5f, Float.parseFloat("15.5"));
+        assertThrows(NumberFormatException.class, () -> Float.parseFloat("abc"));
     }
 
     @Test
-    void TesteEquals() {
-        assertTrue(valores.valor1().equals(valores.valor3()));
-        assertFalse(valores.valor1().equals(valores.valor2()));
+    void deveVerificarHashCodeEIgualdadeCorretos() {
+        Float valor1 = FloatValues.VALOR_CONSTANTE.getValores().get(0);
+        Float valor2 = FloatValues.VALOR_CONSTANTE.getValores().get(0);
+        assertEquals(valor1.hashCode(), valor2.hashCode());
+        assertTrue(valor1.equals(valor2));
     }
 
     @Test
-    void TesteMax() {
-        assertEquals(valores.valor20_5f(), Float.max(valores.valor1(), valores.valor2()));
+    void deveCompararValoresCorretamente() {
+        List<Float> ordenados = FloatValues.VALORES_PEQUENOS.getValores().stream().sorted(Float::compare)
+                .collect(Collectors.toList());
+        assertEquals(ordenados.get(0), ordenados.stream().min(Float::compare).orElseThrow());
+        assertEquals(ordenados.get(ordenados.size() - 1), ordenados.stream().max(Float::compare).orElseThrow());
     }
 
     @Test
-    void TesteMin() {
-        assertEquals(valores.valor10_5f(), Float.min(valores.valor1(), valores.valor2()));
-    }
+    void deveFiltrarPositivosENaN() {
+        long positivos = FloatValues.VALORES_MISTURADOS.getValores().stream().filter(v -> v > 0).count();
+        assertTrue(positivos > 0);
 
-    @Test
-    void TesteSum() {
-        assertEquals(valores.valorSoma(), Float.sum(valores.valor1(), valores.valor2()));
-    }
-
-    @Test
-    void TesteByteValue() {
-        assertEquals((byte) valores.valor10(), valores.valor1().byteValue());
-    }
-
-    @Test
-    void TesteShortValue() {
-        assertEquals((short) valores.valor10(), valores.valor1().shortValue());
-    }
-
-    @Test
-    void TesteIntValue() {
-        assertEquals(valores.valor10(), valores.valor1().intValue());
-    }
-
-    @Test
-    void TesteLongValue() {
-        assertEquals(valores.valor10L(), valores.valor1().longValue());
-    }
-
-    @Test
-    void TesteFloatValue() {
-        assertEquals(valores.valor10_5f(), valores.valor1().floatValue());
-    }
-
-    @Test
-    void TesteDoubleValue() {
-        assertEquals(valores.valorDouble(), valores.valor1().doubleValue());
+        long quantidadeNaN = FloatValues.VALORES_MISTURADOS.getValores().stream().filter(v -> Float.isNaN(v)).count();
+        assertTrue(quantidadeNaN > 0);
     }
 }

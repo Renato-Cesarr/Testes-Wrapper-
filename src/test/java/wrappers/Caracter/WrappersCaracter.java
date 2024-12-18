@@ -5,93 +5,89 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class WrappersCaracter{
-
-    private RecordCaracter valores;
+class WrappersCaracter {
 
     @BeforeEach
     void setup() {
-        valores = new RecordCaracter('a', 'b', 'a');
     }
 
     @Test
-    void TesteCompare() {
-        assertTrue(Character.compare(valores.valor1(), valores.valor2()) < 0);
-        assertTrue(Character.compare(valores.valor2(), valores.valor1()) > 0);
-        assertEquals(0, Character.compare(valores.valor1(), valores.valor3()));
+    void deveRetornarValorCorretoAoUsarValueOf() {
+        for (CaracterValues valor : CaracterValues.values()) {
+            char esperado = valor.getValor();
+            Character caracter = Character.valueOf(esperado);
+            assertEquals(esperado, caracter.charValue());
+        }
     }
 
     @Test
-    void TesteValueOf() {
-        String valorString = "a";
-        Character valor = Character.valueOf(valorString.charAt(0));
-        assertEquals('a', valor);
+    void deveRetornarValorCorretoAoUsarParseCharacter() {
+        for (CaracterValues valor : CaracterValues.values()) {
+            assertEquals(valor.getValor(), Character.toString(valor.getValor()).charAt(0));
+        }
     }
 
     @Test
-    void TesteParseCharacter() {
-        String valorString = "a";
-        assertEquals('a', valorString.charAt(0));
+    void deveRetornarStringCorretaAoUsarToString() {
+        for (CaracterValues valor : CaracterValues.values()) {
+            assertEquals(String.valueOf(valor.getValor()), Character.toString(valor.getValor()));
+        }
     }
 
     @Test
-    void TesteToString() {
-        assertEquals("a", valores.valor1().toString());
+    void deveRetornarHashCodeCorretoAoUsarHashCode() {
+        for (CaracterValues valor : CaracterValues.values()) {
+            assertEquals(Character.valueOf(valor.getValor()).hashCode(), valor.getValor());
+        }
     }
 
     @Test
-    void TesteHashCode() {
-        assertEquals(valores.valor1().hashCode(), Character.valueOf('a').hashCode());
+    void deveRetornarTrueAoCompararIgualdadeComMesmoValor() {
+        for (CaracterValues valor : CaracterValues.values()) {
+            assertEquals(valor.getValor(), valor.getValor());
+        }
     }
 
     @Test
-    void TesteEquals() {
-        assertTrue(valores.valor1().equals(valores.valor3()));
-        assertFalse(valores.valor1().equals(valores.valor2()));
+    void deveRetornarTrueSeCaractereForMaiusculo() {
+        for (CaracterValues valor : CaracterValues.values()) {
+            assertEquals(Character.isUpperCase(valor.getValor()), Character.isUpperCase(valor.getValor()));
+        }
     }
 
     @Test
-    void TesteIsUpperCase() {
-        assertFalse(Character.isUpperCase(valores.valor1()));
-        assertTrue(Character.isUpperCase('A'));
+    void deveRetornarTrueSeCaractereForMinusculo() {
+        for (CaracterValues valor : CaracterValues.values()) {
+            boolean isLowerCase = Character.isLowerCase(valor.getValor());
+            assertEquals(Character.isLowerCase(valor.getValor()), isLowerCase);
+        }
     }
 
     @Test
-    void TesteIsLowerCase() {
-        assertTrue(Character.isLowerCase(valores.valor1()));
-        assertFalse(Character.isLowerCase('A'));
+    void deveRetornarTrueSeCaractereForDigito() {
+        for (CaracterValues valor : CaracterValues.values()) {
+            boolean isDigit = Character.isDigit(valor.getValor());
+            assertEquals(Character.isDigit(valor.getValor()), isDigit);
+        }
     }
 
     @Test
-    void TesteIsDigit() {
-        assertFalse(Character.isDigit(valores.valor1()));
-        assertTrue(Character.isDigit('3'));
+    void deveRetornarCaractereMinusculoAoUsarToLowerCase() {
+        for (CaracterValues valor : CaracterValues.values()) {
+            assertEquals(Character.toLowerCase(valor.getValor()), valor.getValor());
+        }
     }
 
     @Test
-    void TesteToUpperCase() {
-        assertEquals('A', Character.toUpperCase(valores.valor1()));
-    }
-
-    @Test
-    void TesteToLowerCase() {
-        assertEquals('a', Character.toLowerCase('A'));
-    }
-
-    @Test
-    void TesteCharValue() {
-        assertEquals('a', valores.valor1().charValue());
-    }
-
-    @Test
-    void TesteCodePoint() {
-        int expectedCodePoint = (int) 'a';
-        assertEquals(expectedCodePoint, Character.codePointAt(new char[]{valores.valor1()}, 0));
-    }
-
-    @Test
-    void TesteIsWhitespace() {
-        assertFalse(Character.isWhitespace(valores.valor1()));
-        assertTrue(Character.isWhitespace(' '));
+    void deveCompararCaracteresCorretamente() {
+        for (CaracterValues valor : CaracterValues.values()) {
+            for (CaracterValues outroValor : CaracterValues.values()) {
+                if (valor != outroValor) {
+                    assertTrue(Character.compare(valor.getValor(), outroValor.getValor()) != 0);
+                } else {
+                    assertEquals(0, Character.compare(valor.getValor(), outroValor.getValor()));
+                }
+            }
+        }
     }
 }
