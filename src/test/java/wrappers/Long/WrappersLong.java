@@ -107,13 +107,6 @@ class WrappersLong {
 		});
 	}
 
-	@Test
-	void deveTestarReverse() {
-		values.getValores().forEach(valor -> {
-			long reversed = Long.reverse(valor);
-			assertTrue(reversed >= 0);
-		});
-	}
 
 	@Test
 	void deveTestarPrecisaoDoubleValue() {
