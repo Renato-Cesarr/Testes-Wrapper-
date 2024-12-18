@@ -70,7 +70,7 @@ class WrappersCaracter {
             assertEquals(valor, Character.toLowerCase(valor)); 
         }
     }
-
+ 
     @ParameterizedTest
     @MethodSource("TolowerEUper")
     void deveTestarToUpperCase(Character valor) {
@@ -87,15 +87,6 @@ class WrappersCaracter {
     void deveTestarToString(Character valor) {
         assertEquals(Character.toString(valor), String.valueOf(valor));
     }
-
-   /* @ParameterizedTest
-    @MethodSource("caracterValues")
-    void deveTestarGetNumericValue(Character valor) {
-        if (Character.isDigit(valor)) {
-            assertEquals(Character.getNumericValue(valor), Integer.parseInt(String.valueOf(valor)));
-        } else {
-            assertEquals(-1, Character.getNumericValue(valor));}
-    } */
 
     @ParameterizedTest
     @MethodSource("caracterValues")
