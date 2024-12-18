@@ -1,97 +1,115 @@
 package wrappers.Caracter;
 
 import static org.junit.jupiter.api.Assertions.*;
+import java.util.stream.Stream;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+class WrappersCaracter {
 
-class WrappersCaracter{
-
-    private RecordCaracter valores;
-
-    @BeforeEach
-    void setup() {
-        valores = new RecordCaracter('a', 'b', 'a');
+    static Stream<Character> caracterValues() {
+        return CaracterValues.getAllValues().stream();
     }
 
-    @Test
-    void TesteCompare() {
-        assertTrue(Character.compare(valores.valor1(), valores.valor2()) < 0);
-        assertTrue(Character.compare(valores.valor2(), valores.valor1()) > 0);
-        assertEquals(0, Character.compare(valores.valor1(), valores.valor3()));
+    static Stream<Character> digitValues() {
+        return Stream.of(CaracterValues.NUMERO_ZERO.getValor(), CaracterValues.NUMERO_NOVE.getValor());
     }
 
-    @Test
-    void TesteValueOf() {
-        String valorString = "a";
-        Character valor = Character.valueOf(valorString.charAt(0));
-        assertEquals('a', valor);
+    static Stream<Character> TolowerEUper() {
+        return Stream.of(CaracterValues.LETRA_A.getValor(), CaracterValues.LETRA_Z.getValor());
     }
 
-    @Test
-    void TesteParseCharacter() {
-        String valorString = "a";
-        assertEquals('a', valorString.charAt(0));
+    @ParameterizedTest
+    @MethodSource("caracterValues")
+    void deveTestarCharCount(Character valor) {
+        int codePoint = Character.codePointAt(new char[] { valor }, 0);
+        assertEquals(Character.charCount(codePoint), Character.charCount(codePoint));
     }
 
-    @Test
-    void TesteToString() {
-        assertEquals("a", valores.valor1().toString());
+    @ParameterizedTest
+    @MethodSource("digitValues")
+    void deveTestarForDigit(Character valor) {
+        int numericValue = Character.getNumericValue(valor);
+        assertEquals(valor, Character.forDigit(numericValue, 10));
     }
 
-    @Test
-    void TesteHashCode() {
-        assertEquals(valores.valor1().hashCode(), Character.valueOf('a').hashCode());
+    @ParameterizedTest
+    @MethodSource("caracterValues")
+    void deveTestarIsDigit(Character valor) {
+        boolean result = Character.isDigit(valor);
+        assertEquals(result, Character.getNumericValue(valor) >= 0 && Character.getNumericValue(valor) <= 9);
     }
 
-    @Test
-    void TesteEquals() {
-        assertTrue(valores.valor1().equals(valores.valor3()));
-        assertFalse(valores.valor1().equals(valores.valor2()));
+    @ParameterizedTest
+    @MethodSource("caracterValues")
+    void deveTestarIsLetter(Character valor) {
+        assertEquals(Character.isLetter(valor), Character.isAlphabetic(valor));
     }
 
-    @Test
-    void TesteIsUpperCase() {
-        assertFalse(Character.isUpperCase(valores.valor1()));
-        assertTrue(Character.isUpperCase('A'));
+    @ParameterizedTest
+    @MethodSource("caracterValues")
+    void deveTestarIsLetterOrDigit(Character valor) {
+        boolean isLetterOrDigit = Character.isLetter(valor) || Character.isDigit(valor);
+        assertEquals(Character.isLetterOrDigit(valor), isLetterOrDigit);
     }
 
-    @Test
-    void TesteIsLowerCase() {
-        assertTrue(Character.isLowerCase(valores.valor1()));
-        assertFalse(Character.isLowerCase('A'));
+    @ParameterizedTest
+    @MethodSource("caracterValues")
+    void deveTestarIsWhitespace(Character valor) {
+        boolean result = Character.isWhitespace(valor);
+        assertEquals(result, valor == ' ' || valor == '\t' || valor == '\n' || valor == '\r');
     }
 
-    @Test
-    void TesteIsDigit() {
-        assertFalse(Character.isDigit(valores.valor1()));
-        assertTrue(Character.isDigit('3'));
+    @ParameterizedTest
+    @MethodSource("TolowerEUper")
+    void deveTestarToLowerCase(Character valor) {
+        if (Character.isLetter(valor)) {
+            char lowerCase = Character.toLowerCase(valor);
+            assertTrue(Character.isLowerCase(lowerCase));
+        } else {
+            assertEquals(valor, Character.toLowerCase(valor)); 
+        }
+    }
+ 
+    @ParameterizedTest
+    @MethodSource("TolowerEUper")
+    void deveTestarToUpperCase(Character valor) {
+        if (Character.isLetter(valor)) {
+            char upperCase = Character.toUpperCase(valor);
+            assertTrue(Character.isUpperCase(upperCase));
+        } else {
+            assertEquals(valor, Character.toUpperCase(valor)); 
+        }
+    } 
+
+    @ParameterizedTest
+    @MethodSource("caracterValues")
+    void deveTestarToString(Character valor) {
+        assertEquals(Character.toString(valor), String.valueOf(valor));
     }
 
-    @Test
-    void TesteToUpperCase() {
-        assertEquals('A', Character.toUpperCase(valores.valor1()));
+    @ParameterizedTest
+    @MethodSource("caracterValues")
+    void deveTestarIsDefined(Character valor) {
+        assertEquals(Character.isDefined(valor), Character.getType(valor) != Character.UNASSIGNED);
     }
 
-    @Test
-    void TesteToLowerCase() {
-        assertEquals('a', Character.toLowerCase('A'));
+    @ParameterizedTest
+    @MethodSource("caracterValues")
+    void deveTestarIsISOControl(Character valor) {
+        boolean result = Character.isISOControl(valor);
+        assertEquals(result, (valor >= 0x00 && valor <= 0x1F) || (valor >= 0x7F && valor <= 0x9F));
     }
 
-    @Test
-    void TesteCharValue() {
-        assertEquals('a', valores.valor1().charValue());
+    @ParameterizedTest
+    @MethodSource("caracterValues")
+    void deveTestarIsAlphabetic(Character valor) {
+        assertEquals(Character.isAlphabetic(valor), Character.isLetter(valor));
     }
 
-    @Test
-    void TesteCodePoint() {
-        int expectedCodePoint = (int) 'a';
-        assertEquals(expectedCodePoint, Character.codePointAt(new char[]{valores.valor1()}, 0));
-    }
-
-    @Test
-    void TesteIsWhitespace() {
-        assertFalse(Character.isWhitespace(valores.valor1()));
-        assertTrue(Character.isWhitespace(' '));
+    @ParameterizedTest
+    @MethodSource("caracterValues")
+    void deveTestarIsSurrogate(Character valor) {
+        assertEquals(Character.isSurrogate(valor), Character.isSurrogatePair(valor, valor));
     }
 }

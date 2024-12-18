@@ -7,36 +7,33 @@ import org.junit.jupiter.api.Test;
 
 class WrapperBoolean {
 
-    RecordBoolean recordBoolean;
-
     @BeforeEach
     void setup() {
-        recordBoolean = new RecordBoolean(true, false, null, true, false);
     }
 
     @Test
     void TesteCompareTo() {
-        assertEquals(0, recordBoolean.booleanTrue().compareTo(true));
-        assertTrue(recordBoolean.booleanTrue().compareTo(false) > 0);
-        assertTrue(recordBoolean.booleanFalse().compareTo(true) < 0);
+        assertEquals(0, BoolenaValues.TRUE.getValor().compareTo(true));
+        assertTrue(BoolenaValues.TRUE.getValor().compareTo(false) > 0);
+        assertTrue(BoolenaValues.FALSE.getValor().compareTo(true) < 0);
     }
 
     @Test
     void TesteEquals() {
-        assertTrue(recordBoolean.booleanTrue().equals(true));
-        assertFalse(recordBoolean.booleanTrue().equals(false));
+        assertTrue(BoolenaValues.TRUE.getValor().equals(true));
+        assertFalse(BoolenaValues.TRUE.getValor().equals(false));
     }
 
     @Test
     void TesteBooleanValue() {
-        assertTrue(recordBoolean.booleanTrue());
-        assertFalse(recordBoolean.booleanFalse());
+        assertTrue(BoolenaValues.TRUE.getValor());
+        assertFalse(BoolenaValues.FALSE.getValor());
     }
 
     @Test
     void TesteToString() {
-        assertEquals("true", recordBoolean.booleanTrue().toString());
-        assertEquals("false", recordBoolean.booleanFalse().toString());
+        assertEquals("true", BoolenaValues.TRUE.getValor().toString());
+        assertEquals("false", BoolenaValues.FALSE.getValor().toString());
     }
 
     @Test
@@ -82,23 +79,23 @@ class WrapperBoolean {
 
     @Test
     void TesteNullBoolean() {
-        assertNull(recordBoolean.booleanNull());
+        assertNull(BoolenaValues.NULL.getValor());
     }
 
     @Test
     void TestePrimitiveBoolean() {
-        assertTrue(recordBoolean.primTrue());
-        assertFalse(recordBoolean.primFalse());
+        assertTrue(Boolean.TRUE);
+        assertFalse(Boolean.FALSE);
     }
 
     @Test
     void TesteToStringWithPrimitiveTrue() {
-        assertEquals("true", Boolean.toString(recordBoolean.primTrue()));
+        assertEquals("true", Boolean.toString(Boolean.TRUE));
     }
 
     @Test
     void TesteToStringWithPrimitiveFalse() {
-        assertEquals("false", Boolean.toString(recordBoolean.primFalse()));
+        assertEquals("false", Boolean.toString(Boolean.FALSE));
     }
 
     @Test

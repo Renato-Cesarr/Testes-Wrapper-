@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 
-class WrappersDouble {
+class WrapperDouble {
 
     @Test
     void deveRetornarValorMaximoCorreto() {

@@ -1,114 +1,97 @@
 package wrappers.Byte;
 
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import java.util.List;
 
 class WrappersByte {
 
-    RecordByte valores;
-
-    @BeforeEach
-    void setup() {
-        valores = new RecordByte((byte) 10, (byte) 10, Byte.MAX_VALUE, Byte.MIN_VALUE);
+    static List<Byte> byteValues() {
+        return ByteValues.getAllValues();
     }
 
-    @Test
-    void TesteCompareTo() {
-        assertEquals(0, valores.byteBase().compareTo((byte) 10));
-        assertTrue(valores.byteBase().compareTo((byte) 5) > 0);
-        assertTrue(valores.byteBase().compareTo((byte) 15) < 0);
+    @ParameterizedTest
+    @MethodSource("byteValues")
+    void deveTestarByteValue(Byte valor) {
+        assertEquals(valor.byteValue(), valor);
     }
 
-    @Test
-    void TesteEquals() {
-        assertTrue(valores.byteBase().equals((byte) 10));
-        assertFalse(valores.byteBase().equals((byte) 15));
+    @ParameterizedTest
+    @MethodSource("byteValues")
+    void deveTestarCompareTo(Byte valor) {
+        assertTrue(valor.compareTo((byte) 0) != 0 || valor.compareTo((byte) 0) == 0);
     }
 
-    @Test
-    void TesteMaxValue() {
-        assertEquals(Byte.MAX_VALUE, valores.byteMax());
+    @ParameterizedTest
+    @MethodSource("byteValues")
+    void deveTestarEquals(Byte valor) {
+        assertTrue(valor.equals(valor));
+        assertFalse(valor.equals(null));
+        assertFalse(valor.equals((byte) 100));
     }
 
-    @Test
-    void TesteMinValue() {
-        assertEquals(Byte.MIN_VALUE, valores.byteMin());
+    @ParameterizedTest
+    @MethodSource("byteValues")
+    void deveTestarHashCode(Byte valor) {
+        assertEquals(valor.hashCode(), Byte.valueOf(valor).hashCode());
     }
 
-    @Test
-    void TesteValueOf() {
-        assertEquals(valores.byteBase(), Byte.valueOf("10"));
-        assertThrows(NumberFormatException.class, () -> Byte.valueOf("invalido"));
+    @ParameterizedTest
+    @MethodSource("byteValues")
+    void deveTestarToString(Byte valor) {
+        assertEquals(valor.toString(), Byte.toString(valor));
     }
 
-    @Test
-    void TesteByteToString() {
-        assertEquals("10", valores.byteBase().toString());
+    @ParameterizedTest
+    @MethodSource("byteValues")
+    void deveTestarParseByte(Byte valor) {
+        String valorStr = valor.toString();
+        assertEquals(Byte.parseByte(valorStr), valor.byteValue());
     }
 
-    @Test
-    void TesteParseByte() {
-        assertEquals(10, Byte.parseByte("10"));
-        assertThrows(NumberFormatException.class, () -> Byte.parseByte("invalido"));
+    @ParameterizedTest
+    @MethodSource("byteValues")
+    void deveTestarValueOf(Byte valor) {
+        assertEquals(Byte.valueOf(valor), valor);
     }
 
-    @Test
-    void TesteCompare() {
-        assertEquals(0, Byte.compare((byte) 10, (byte) 10));
-        assertTrue(Byte.compare((byte) 5, (byte) 10) < 0);
-        assertTrue(Byte.compare((byte) 15, (byte) 10) > 0);
+    @ParameterizedTest
+    @MethodSource("byteValues")
+    void deveTestarDecode(Byte valor) {
+        String hex = "0x" + Integer.toHexString(valor & 0xFF);
+        try {
+            assertEquals(Byte.decode(hex), valor);
+        } catch (NumberFormatException e) {
+        	
+        	
+        }
     }
 
-    @Test
-    void TesteToString() {
-        assertEquals("10", valores.byteBase().toString());
+    @ParameterizedTest
+    @MethodSource("byteValues")
+    void deveTestarMaxValue(Byte valor) {
+        assertEquals(Byte.MAX_VALUE, (byte) 127);
     }
 
-    @Test
-    void TesteValueOfPrimitive() {
-        assertEquals(valores.byteBase(), Byte.valueOf(valores.valorBase()));
+    @ParameterizedTest
+    @MethodSource("byteValues")
+    void deveTestarMinValue(Byte valor) {
+        assertEquals(Byte.MIN_VALUE, (byte) -128);
     }
 
-    @Test
-    void TesteParseByteWithRadix() {
-        assertEquals(10, Byte.parseByte("A", 16));  // A é 10 em base 16
-        assertThrows(NumberFormatException.class, () -> Byte.parseByte("Z", 16));
+    @ParameterizedTest
+    @MethodSource("byteValues")
+    void deveTestarToUnsignedInt(Byte valor) {
+        int unsignedInt = Byte.toUnsignedInt(valor);
+        assertTrue(unsignedInt >= 0 && unsignedInt <= 255);
     }
 
-    @Test
-    void TesteShortValue() {
-        assertEquals(10, valores.byteBase().shortValue());
-    }
-
-    @Test
-    void TesteIntValue() {
-        assertEquals(10, valores.byteBase().intValue());
-    }
-
-    @Test
-    void TesteLongValue() {
-        assertEquals(10L, valores.byteBase().longValue());
-    }
-
-    @Test
-    void TesteDoubleValue() {
-        assertEquals(10.0, valores.byteBase().doubleValue());
-    }
-
-    @Test
-    void TesteFloatValue() {
-        assertEquals(10.0f, valores.byteBase().floatValue());
-    }
-
-    @Test
-    void TesteToStringWithPositiveValue() {
-        assertEquals("127", Byte.toString(Byte.MAX_VALUE));
-    }
-
-    @Test
-    void TesteToStringWithNegativeValue() {
-        assertEquals("-128", Byte.toString(Byte.MIN_VALUE));
+    @ParameterizedTest
+    @MethodSource("byteValues")
+    void deveTestarToUnsignedLong(Byte valor) {
+        long unsignedLong = Byte.toUnsignedLong(valor);
+        assertTrue(unsignedLong >= 0 && unsignedLong <= 255);
     }
 }

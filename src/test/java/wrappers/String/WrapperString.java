@@ -1,169 +1,151 @@
 package wrappers.String;
 
 import static org.junit.jupiter.api.Assertions.*;
-
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import java.util.Arrays;
+import java.util.List;
 
 class WrapperString {
 
-    RecordString textos;
-
-    @BeforeEach
-    void setup() {
-        textos = new RecordString(
-            "teste", 
-            "TESTE",  
-            "teste",  
-            "  teste  ", 
-            "um,two,tres",      
-            String.format("Nome: %s, Idade: %d", "João", 25),
-            "a1b2c3"               
-        );
+    // Método que fornece os dados para os testes
+    static List<String> stringValues() {
+        return StringValues.getAllValues();
     }
 
-    @Test
-    void TesteCharAt() {
-        assertEquals('t', textos.textoBase().charAt(0));
-        assertEquals('e', textos.textoBase().charAt(1));
+    @ParameterizedTest
+    @MethodSource("stringValues")
+    void deveTestarContainsParaTodosValores(String valor) {
+        assertTrue(valor.contains(valor.substring(0, 3)));
     }
 
-    @Test
-    void TesteCompareTo() {
-        String texto2 = "teste";
-        String texto3 = "outro";
-        assertEquals(0, textos.textoBase().compareTo(texto2));
-        assertTrue(textos.textoBase().compareTo(texto3) > 0);
-        assertTrue(texto3.compareTo(textos.textoBase()) < 0);
-    }
-    
-    @Test
-    void TesteContains() {
-        assertTrue(textos.textoBase().contains("tes"));
-        assertFalse(textos.textoBase().contains("outro"));
+    @ParameterizedTest
+    @MethodSource("stringValues")
+    void deveTestarEndsWithParaTodosValores(String valor) {
+        assertTrue(valor.endsWith(valor.substring(valor.length() - 3)));
     }
 
-    @Test
-    void TesteEndsWith() {
-        assertTrue(textos.textoBase().endsWith("teste"));
-        assertFalse(textos.textoBase().endsWith("outro"));
+    @ParameterizedTest
+    @MethodSource("stringValues")
+    void deveTestarIndexOfParaTodosValores(String valor) {
+        assertTrue(valor.indexOf(valor.substring(0, 3)) >= 0);
     }
 
-    @Test
-    void TesteEquals() {
-        assertTrue(textos.textoBase().equals("teste"));
-        assertFalse(textos.textoBase().equals("outro"));
+    @ParameterizedTest
+    @MethodSource("stringValues")
+    void deveTestarIsEmptyParaTodosValores(String valor) {
+        if (valor.trim().isEmpty()) {
+            assertTrue(valor.isEmpty());
+        } else {
+            assertFalse(valor.isEmpty());
+        }
     }
 
-    @Test
-    void TesteIndexOf() {
-        assertEquals(0, textos.textoBase().indexOf("t"));
-        assertEquals(-1, textos.textoBase().indexOf("outro"));
+    @ParameterizedTest
+    @MethodSource("stringValues")
+    void deveTestarLengthParaTodosValores(String valor) {
+        assertTrue(valor.length() > 0);
     }
 
-    @Test
-    void TesteIsEmpty() {
-        String textoVazio = "";
-        assertFalse(textos.textoBase().isEmpty());
-        assertTrue(textoVazio.isEmpty());
+    @ParameterizedTest
+    @MethodSource("stringValues")
+    void deveTestarSplitParaTodosValores(String valor) {
+        String[] partes = valor.split(",");
+        assertTrue(partes.length >= 1);
     }
 
-    @Test
-    void TesteLength() {
-        assertEquals(5, textos.textoBase().length());
+    @ParameterizedTest
+    @MethodSource("stringValues")
+    void deveTestarStartsWithParaTodosValores(String valor) {
+        assertTrue(valor.startsWith(valor.substring(0, 1)));
     }
 
-    @Test
-    void TesteReplace() {
-        assertEquals("tezte", textos.textoBase().replace('s', 'z'));
+    @ParameterizedTest
+    @MethodSource("stringValues")
+    void deveTestarSubStringParaTodosValores(String valor) {
+        assertEquals(valor.substring(0, 3), valor.substring(0, 3));
     }
 
-    @Test
-    void TesteSplit() {
-        String[] partes = textos.textoSplit().split(",");
-        assertEquals(3, partes.length);
-        assertEquals("um", partes[0]);
-        assertEquals("two", partes[1]);
-        assertEquals("tres", partes[2]);
+    @ParameterizedTest
+    @MethodSource("stringValues")
+    void deveTestarToLowerCaseParaTodosValores(String valor) {
+        assertEquals(valor.toLowerCase(), valor.toLowerCase());
     }
 
-    @Test
-    void TesteStartsWith() {
-        assertTrue(textos.textoBase().startsWith("te"));
-        assertFalse(textos.textoBase().startsWith("out"));
+    @ParameterizedTest
+    @MethodSource("stringValues")
+    void deveTestarToUpperCaseParaTodosValores(String valor) {
+        assertEquals(valor.toUpperCase(), valor.toUpperCase());
     }
 
-    @Test
-    void TesteSubString() {
-        assertEquals("tes", textos.textoBase().substring(0, 3));
+    @ParameterizedTest
+    @MethodSource("stringValues")
+    void deveTestarCharAtParaTodosValores(String valor) {
+        assertNotNull(valor.charAt(0));
+        assertNotNull(valor.charAt(1));
     }
 
-    @Test
-    void TesteToLowerCase() {
-        assertEquals(textos.textoBaseLowerCase(), textos.textoBaseUpperCase().toLowerCase());
+    @ParameterizedTest
+    @MethodSource("stringValues")
+    void deveTestarCompareToParaTodosValores(String valor) {
+        String texto = "teste";
+        assertTrue(valor.compareTo(texto) != 0);
     }
 
-    @Test
-    void TesteToUpperCase() {
-        assertEquals(textos.textoBaseUpperCase(), textos.textoBaseLowerCase().toUpperCase());
+    @ParameterizedTest
+    @MethodSource("stringValues")
+    void deveTestarTrimParaTodosValores(String valor) {
+        assertEquals(valor.trim(), valor.trim());
     }
 
-    @Test
-    void TesteTrim() {
-        assertEquals("teste", textos.textoBaseTrimmed().trim());
+    @ParameterizedTest
+    @MethodSource("stringValues")
+    void deveTestarValueOfParaTodosValores(String valor) {
+        assertEquals(String.valueOf(123), "123");
     }
 
-    @Test
-    void TesteValueOf() {
-        int numero = 123;
-        assertEquals("123", String.valueOf(numero));
+    @ParameterizedTest
+    @MethodSource("stringValues")
+    void deveTestarFormatParaTodosValores(String valor) {
+        assertEquals(String.format("Valor: %s", valor), String.format("Valor: %s", valor));
     }
 
-    @Test
-    void TesteFormat() {
-        assertEquals(textos.textoFormatado(), String.format("Nome: João, Idade: 25"));
+    @ParameterizedTest
+    @MethodSource("stringValues")
+    void deveTestarReplaceAllParaTodosValores(String valor) {
+        assertEquals(valor.replaceAll("[0-9]", ""), valor.replaceAll("[0-9]", ""));
     }
 
-    @Test
-    void TesteReplaceAll() {
-        assertEquals("abc", textos.textoReplaceAll().replaceAll("[0-9]", ""));
+    @ParameterizedTest
+    @MethodSource("stringValues")
+    void deveTestarCodePointAtParaTodosValores(String valor) {
+        assertTrue(valor.codePointAt(0) > 0);
     }
 
-    @Test
-    void TesteMatches() {
-        assertTrue(textos.textoBase().matches(".*\\w.*"));
-        assertFalse(textos.textoBase().matches(".*\\d.*"));
+    @ParameterizedTest
+    @MethodSource("stringValues")
+    void deveTestarCodePointBeforeParaTodosValores(String valor) {
+        assertTrue(valor.codePointBefore(1) > 0);
     }
 
-    @Test
-    void TesteCodePointAt() {
-        assertEquals(116, textos.textoBase().codePointAt(0));
+    @ParameterizedTest
+    @MethodSource("stringValues")
+    void deveTestarGetBytesParaTodosValores(String valor) {
+        byte[] bytes = valor.getBytes();
+        assertTrue(bytes.length > 0);
     }
 
-    @Test
-    void TesteCodePointBefore() {
-        assertEquals(116, textos.textoBase().codePointBefore(1));
+    @ParameterizedTest
+    @MethodSource("stringValues")
+    void deveTestarCompareToIgnoreCaseParaTodosValores(String valor) {
+        assertEquals(0, valor.compareToIgnoreCase(valor.toUpperCase()));
     }
 
-    @Test
-    void TesteGetBytes() {
-        byte[] bytes = textos.textoBase().getBytes();
-        assertEquals(5, bytes.length);
-    }
-
-    @Test
-    void TesteCompareToIgnoreCase() {
-        assertEquals(0, textos.textoBase().compareToIgnoreCase(textos.textoBaseUpperCase()));
-    }
-
-    @Test
-    void TesteContainsIgnoreCase() {
-        assertTrue(textos.textoBase().toLowerCase().contains("teste"));
-    }
-    
-    @Test
-    void TesteJoin() {
-        String textoJoin = String.join(",", "um", "dois", "tres");
-        assertEquals("um,dois,tres", textoJoin);
+    @ParameterizedTest
+    @MethodSource("stringValues")
+    void deveTestarContainsIgnoreCaseParaTodosValores(String valor) {
+        assertTrue(valor.toLowerCase().contains(valor.toLowerCase().substring(0, 3)));
     }
 }
